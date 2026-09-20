@@ -3,8 +3,8 @@ document.querySelector('#year').textContent = new Date().getFullYear();
 // Every card intentionally points to a different origin. Update only these
 // URLs when a game moves; the hub and other games keep working independently.
 const gameUrls = {
-  bunker: 'https://bunker.bletbox.com',
-  'who-first': 'https://first.bletbox.com',
+  bunker: 'https://ai-bunker.onrender.com',
+  'who-first': 'https://bletbox-who-first.onrender.com',
 };
 
 for (const card of document.querySelectorAll('[data-game]')) {
