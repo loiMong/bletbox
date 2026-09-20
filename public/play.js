@@ -133,6 +133,8 @@ function handleError(code) {
     resumeToken = '';
   } else if (code === 'NAME_REQUIRED') {
     qs('#join-error').textContent = 'Введите ник.';
+  } else if (code === 'ROUND_IN_PROGRESS') {
+    qs('#join-error').textContent = 'Раунд уже идёт. Войти можно после его завершения.';
   } else {
     qs('#join-error').textContent = 'Не удалось войти. Попробуйте снова.';
   }

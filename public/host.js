@@ -13,6 +13,8 @@ const joinUrl = `${location.origin}/play?room=${encodeURIComponent(room)}`;
 qs('#join-link').textContent = joinUrl;
 
 let state = null;
+let previousStatus = null;
+let audioContext = null;
 const socket = createSocket({
   onOpen(rawSocket) {
     rawSocket.send(JSON.stringify({ type: 'host:connect', room, hostToken }));
@@ -36,8 +38,13 @@ function command(type, extra = {}) {
   socket.send({ type, hostToken, ...extra });
 }
 
-qs('#start-round').addEventListener('click', () => command('round:start'));
-qs('#reset-round').addEventListener('click', () => command('round:reset'));
+function startRound() {
+  prepareRoundSignal();
+  command('round:start');
+}
+
+qs('#start-round').addEventListener('click', startRound);
+qs('#new-round').addEventListener('click', startRound);
 qs('#answer-correct').addEventListener('click', () => command('answer:judge', { correct: true }));
 qs('#answer-wrong').addEventListener('click', () => command('answer:judge', { correct: false }));
 
@@ -48,6 +55,13 @@ function plural(value, one, few, many) {
 }
 
 function render() {
+  const roundBecameActive = previousStatus === 'armed' && state.status === 'active';
+  const gameMode = state.round > 0;
+  document.body.classList.toggle('host-play-mode', gameMode);
+  qs('.host-page').classList.toggle('play-mode-page', gameMode);
+  qs('.host-grid').classList.toggle('lobby-mode', !gameMode);
+  qs('.host-grid').classList.toggle('play-mode', gameMode);
+
   const online = state.players.filter((player) => player.online).length;
   qs('#player-count').textContent = `${online} онлайн · ${state.players.length} всего`;
   qs('#players').innerHTML = state.players.length
@@ -63,7 +77,7 @@ function render() {
     waiting: ['Ожидание', 'Все готовы?', 'Игроки могут подключаться в любой момент. Когда будете готовы — запускайте.'],
     armed: ['Приготовились', 'Не нажимать!', 'Кнопка станет активной автоматически. Раннее нажатие — фальстарт.'],
     active: ['Раунд идёт', state.queue.length ? 'Есть нажатия' : 'Ждём нажатий…', 'Порядок фиксируется сервером в момент получения каждого события.'],
-    finished: ['Завершён', 'Раунд завершён', 'Нажмите «Сброс / новый», чтобы очистить очередь, не отключая игроков.'],
+    finished: ['Завершён', 'Раунд завершён', 'Нажмите «Новый раунд», чтобы очистить очередь, не отключая игроков.'],
   }[state.status];
   qs('#status-pill').textContent = copy[0];
   qs('#status-pill').className = `status-pill ${state.status}`;
@@ -71,6 +85,11 @@ function render() {
   qs('#round-title').textContent = copy[1];
   qs('#round-hint').textContent = copy[2];
   qs('#start-round').disabled = state.status === 'armed' || state.status === 'active';
+  qs('#game-status-pill').textContent = copy[0];
+  qs('#game-status-pill').className = `status-pill ${state.status}`;
+  qs('#game-round-label').textContent = `Раунд ${state.round}`;
+  qs('#game-state-text').textContent = copy[1];
+  qs('#new-round').disabled = state.status === 'armed';
 
   qs('#press-count').textContent = plural(state.queue.length, 'ответ', 'ответа', 'ответов');
   qs('#ranking').innerHTML = state.queue.length
@@ -90,6 +109,41 @@ function render() {
 
   const canJudge = state.answerIndex !== null && state.queue.some((entry) => entry.isAnswering) && state.status !== 'finished';
   qs('#judge-actions').classList.toggle('hidden', !canJudge);
+
+  if (roundBecameActive) playRoundSignal();
+  previousStatus = state.status;
+}
+
+function prepareRoundSignal() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+  audioContext ??= new AudioContext();
+  if (audioContext.state === 'suspended') audioContext.resume();
+}
+
+function playRoundSignal() {
+  if (!audioContext || audioContext.state !== 'running') return;
+  const startAt = audioContext.currentTime;
+  const gain = audioContext.createGain();
+  gain.connect(audioContext.destination);
+  gain.gain.setValueAtTime(0.0001, startAt);
+  gain.gain.exponentialRampToValueAtTime(0.22, startAt + 0.015);
+  gain.gain.setValueAtTime(0.22, startAt + 0.28);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.5);
+
+  const first = audioContext.createOscillator();
+  first.type = 'square';
+  first.frequency.setValueAtTime(740, startAt);
+  first.connect(gain);
+  first.start(startAt);
+  first.stop(startAt + 0.2);
+
+  const second = audioContext.createOscillator();
+  second.type = 'square';
+  second.frequency.setValueAtTime(988, startAt + 0.23);
+  second.connect(gain);
+  second.start(startAt + 0.23);
+  second.stop(startAt + 0.5);
 }
 
 function showToast(text) {

@@ -80,3 +80,30 @@ test('resume token reuses the same player identity', () => {
   assert.equal(resumed.online, true);
   assert.equal(manager.getRoom(auth.code).players.size, 2);
 });
+
+test('new players cannot join an armed or active round', async () => {
+  const { manager, auth } = setup();
+  manager.startRound(auth.code, auth.hostToken);
+
+  assert.throws(
+    () => manager.joinPlayer(auth.code, 'Late player'),
+    /ROUND_IN_PROGRESS/,
+  );
+
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  assert.throws(
+    () => manager.joinPlayer(auth.code, 'Later player'),
+    /ROUND_IN_PROGRESS/,
+  );
+});
+
+test('existing player can reconnect during an active round', async () => {
+  const { manager, auth, alex } = setup();
+  manager.startRound(auth.code, auth.hostToken);
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  manager.setPlayerOnline(auth.code, alex.id, false);
+
+  const resumed = manager.joinPlayer(auth.code, 'Alex', alex.resumeToken);
+  assert.equal(resumed.id, alex.id);
+  assert.equal(resumed.online, true);
+});

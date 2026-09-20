@@ -14,7 +14,7 @@
       <div class="connection-state"><span class="dot" id="connection-dot"></span><span id="connection-text">Подключаемся…</span></div>
     </header>
 
-    <div class="host-grid">
+    <div class="host-grid lobby-mode">
       <aside class="sidebar">
         <section class="panel room-card">
           <div>
@@ -44,12 +44,19 @@
           </div>
           <div class="round-actions">
             <button class="primary" id="start-round">СТАРТ РАУНДА</button>
-            <button class="secondary" id="reset-round">СБРОС / НОВЫЙ</button>
           </div>
         </section>
 
         <section class="panel ranking-panel">
-          <div class="panel-head"><h2>Очередь нажатий</h2><span class="count" id="press-count">0 ответов</span></div>
+          <div class="game-toolbar">
+            <div class="game-round-state">
+              <span class="status-pill" id="game-status-pill">Ожидание</span>
+              <span class="game-round-label" id="game-round-label">Раунд 1</span>
+              <strong id="game-state-text">Приготовились</strong>
+            </div>
+            <button class="primary" id="new-round">НОВЫЙ РАУНД</button>
+          </div>
+          <div class="panel-head ranking-head"><h2>Очередь нажатий</h2><span class="count" id="press-count">0 ответов</span></div>
           <div class="ranking" id="ranking"><p class="empty">Здесь появится рейтинг текущего раунда.</p></div>
           <div class="false-starts hidden" id="false-starts"></div>
           <div class="judge-actions hidden" id="judge-actions">

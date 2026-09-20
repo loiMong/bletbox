@@ -64,6 +64,7 @@ export class RoomManager extends EventEmitter {
     const room = this.getRoom(code);
     if (!room) throw new Error('ROOM_NOT_FOUND');
 
+    // Reconnecting players keep their seat even while a round is running.
     if (resumeToken) {
       const existing = [...room.players.values()].find((player) => player.resumeToken === resumeToken);
       if (existing) {
@@ -73,6 +74,13 @@ export class RoomManager extends EventEmitter {
         this.changed(room);
         return existing;
       }
+    }
+
+    // New identities must wait until the current round is over. Keeping this
+    // check after resume-token recovery prevents a connection drop from
+    // locking an existing player out of an active round.
+    if (room.status === 'armed' || room.status === 'active') {
+      throw new Error('ROUND_IN_PROGRESS');
     }
 
     const safeName = cleanName(name);
