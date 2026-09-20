@@ -1,0 +1,20 @@
+{
+  "name": "bletbox-who-first",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Realtime quiz buzzer prototype for Bletbox",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test",
+    "check": "node --check src/server.js && node --check src/room-manager.js && node --check public/app.js && node --check public/host.js && node --check public/play.js && node --check portal/games.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "ws": "^8.18.3"
+  }
+}

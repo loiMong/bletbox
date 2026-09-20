@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f2ea">
+  <title>Игрок — Кто первый?</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="player-page shell">
+    <header class="topbar">
+      <a class="brand" href="/" style="color:inherit;text-decoration:none"><span class="brand-mark">B</span><span>Bletbox<em>.</em></span></a>
+      <div class="player-meta"><span id="player-room"></span><span class="dot" id="connection-dot"></span></div>
+    </header>
+
+    <section class="player-main joining" id="join-view">
+      <form class="join-card player-join" id="player-form">
+        <p class="eyebrow">Комната <span id="join-room"></span></p>
+        <h2>Как вас зовут?</h2>
+        <p class="subtle">Ник увидят ведущий и остальные игроки.</p>
+        <div class="field">
+          <label for="player-name">Ваш ник</label>
+          <input id="player-name" maxlength="24" autocomplete="nickname" placeholder="Например, Alex" required autofocus>
+        </div>
+        <button class="primary" type="submit">Я ГОТОВ</button>
+        <p class="form-error" id="join-error" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="player-main hidden" id="game-view">
+      <div class="buzzer-view">
+        <div class="player-state"><span class="dot" id="state-dot"></span><span id="state-text">Ожидание ведущего</span></div>
+        <button class="buzzer" id="buzzer" aria-label="Игровая кнопка">
+          <span class="buzzer-word" id="buzzer-word">ЖДИ</span>
+          <span class="buzzer-sub" id="buzzer-sub">Ведущий скоро начнёт</span>
+        </button>
+        <div class="player-foot" id="player-foot">Вы в игре как <strong id="player-label"></strong></div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/play.js"></script>
+</body>
+</html>

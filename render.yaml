@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: bletbox-hub
+    runtime: static
+    buildCommand: echo "Static hub ready"
+    staticPublishPath: ./portal
+    autoDeploy: true
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+
+  - type: web
+    name: bletbox-who-first
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 24.11.1

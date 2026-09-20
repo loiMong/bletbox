@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f2ea">
+  <title>Кто первый? — Bletbox</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar shell">
+    <div class="brand"><span class="brand-mark">B</span><span>Bletbox<em>.</em></span></div>
+    <span class="subtle">Realtime buzzer</span>
+  </header>
+  <main class="hero shell">
+    <section>
+      <p class="eyebrow">Викторины · конкурсы · игры</p>
+      <h1>Кто <span>первый?</span></h1>
+      <p class="hero-copy">Мгновенный сетевой buzzer. Соберите игроков, запустите раунд — сервер честно определит порядок нажатий.</p>
+      <button class="primary" id="create-room">СОЗДАТЬ КОМНАТУ →</button>
+      <p class="form-error" id="create-error" aria-live="polite"></p>
+    </section>
+    <form class="join-card" id="join-form">
+      <p class="eyebrow">Для игрока</p>
+      <h2>Войти в комнату</h2>
+      <p class="subtle">Введите код с экрана ведущего. Ник спросим на следующем шаге.</p>
+      <div class="field">
+        <label for="room-code">Код комнаты</label>
+        <input class="room-input" id="room-code" name="room" maxlength="5" autocomplete="off" placeholder="ABCDE" required>
+      </div>
+      <button class="primary" type="submit">ПРОДОЛЖИТЬ</button>
+      <p class="form-error" id="join-error" aria-live="polite"></p>
+    </form>
+  </main>
+  <script type="module">
+    import { qs } from '/app.js';
+    qs('#create-room').addEventListener('click', async () => {
+      const button = qs('#create-room');
+      button.disabled = true;
+      try {
+        const response = await fetch('/api/rooms', { method: 'POST' });
+        if (!response.ok) throw new Error();
+        const room = await response.json();
+        location.href = `/host?room=${encodeURIComponent(room.code)}&token=${encodeURIComponent(room.hostToken)}`;
+      } catch {
+        qs('#create-error').textContent = 'Не удалось создать комнату. Попробуйте ещё раз.';
+        button.disabled = false;
+      }
+    });
+    qs('#join-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const code = qs('#room-code').value.trim().toUpperCase();
+      if (!/^[A-Z2-9]{5}$/.test(code)) {
+        qs('#join-error').textContent = 'Проверьте пятизначный код комнаты.';
+        return;
+      }
+      location.href = `/play?room=${encodeURIComponent(code)}`;
+    });
+  </script>
+</body>
+</html>

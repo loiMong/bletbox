@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f0e7">
+  <meta name="description" content="Bletbox — быстрые игры для компании. Выберите игру и начинайте.">
+  <title>Bletbox — игры для компании</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="/" aria-label="Bletbox — главная">
+      <span class="brand-mark">B</span>
+      <span>Bletbox<em>.</em></span>
+    </a>
+    <span class="online"><i></i> Играй вместе</span>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Игры для своих</p>
+        <h1>Выбирай.<br><span>Собирай друзей.</span><br>Играй.</h1>
+      </div>
+      <p class="lead">Один экран у ведущего, телефоны у игроков — и больше ничего не нужно.</p>
+    </section>
+
+    <section class="games" aria-labelledby="games-title">
+      <div class="section-head">
+        <h2 id="games-title">Все игры</h2>
+        <p>Каждая игра работает отдельно</p>
+      </div>
+
+      <div class="game-grid">
+        <a class="game-card game-card--bunker" href="https://bunker.bletbox.com" data-game="bunker">
+          <span class="card-badge">Для компании</span>
+          <span class="game-icon bunker-icon" aria-hidden="true">
+            <span class="door"></span><span class="wheel">✣</span>
+          </span>
+          <span class="game-copy">
+            <strong>Бункер</strong>
+            <small>Убеди остальных, что именно ты достоин выжить</small>
+          </span>
+          <span class="play">Играть <b>↗</b></span>
+        </a>
+
+        <a class="game-card game-card--buzzer" href="https://first.bletbox.com" data-game="who-first">
+          <span class="card-badge">2–100 игроков</span>
+          <span class="game-icon buzzer-icon" aria-hidden="true">
+            <span class="buzzer-top"></span><span class="buzzer-base"></span>
+          </span>
+          <span class="game-copy">
+            <strong>Кто первый?</strong>
+            <small>Сетевой buzzer для викторин и быстрых раундов</small>
+          </span>
+          <span class="play">Играть <b>↗</b></span>
+        </a>
+
+        <article class="game-card game-card--soon" aria-label="Новая игра скоро">
+          <span class="card-badge">Скоро</span>
+          <span class="game-icon mystery-icon" aria-hidden="true">?</span>
+          <span class="game-copy">
+            <strong>Новая игра</strong>
+            <small>Следующая игра Bletbox уже в разработке</small>
+          </span>
+          <span class="play">Скоро</span>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <span>© <span id="year"></span> Bletbox</span>
+    <span>Без регистрации. Просто играйте.</span>
+  </footer>
+  <script src="/games.js"></script>
+</body>
+</html>

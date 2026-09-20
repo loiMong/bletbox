@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f2ea">
+  <title>Ведущий — Кто первый?</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="host-page shell">
+    <header class="topbar">
+      <a class="brand" href="/" style="color:inherit;text-decoration:none"><span class="brand-mark">B</span><span>Bletbox<em>.</em></span></a>
+      <div class="connection-state"><span class="dot" id="connection-dot"></span><span id="connection-text">Подключаемся…</span></div>
+    </header>
+
+    <div class="host-grid">
+      <aside class="sidebar">
+        <section class="panel room-card">
+          <div>
+            <p class="eyebrow">Код комнаты</p>
+            <h1 class="room-code" id="room-code">—</h1>
+          </div>
+          <div class="qr-wrap"><img id="qr-code" alt="QR-код для входа игроков"></div>
+          <span class="join-link" id="join-link"></span>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Игроки</h2>
+            <span class="count" id="player-count">0 онлайн</span>
+          </div>
+          <div class="players" id="players"><p class="empty">Пока никого.<br>Покажите игрокам QR-код.</p></div>
+        </section>
+      </aside>
+
+      <section class="stage">
+        <section class="panel round-panel">
+          <div>
+            <span class="status-pill" id="status-pill">Ожидание</span>
+            <p class="round-label" id="round-label">Раунд ещё не запускали</p>
+            <h2 class="round-title" id="round-title">Все готовы?</h2>
+            <p class="round-hint" id="round-hint">Игроки могут подключаться в любой момент. Когда будете готовы — запускайте.</p>
+          </div>
+          <div class="round-actions">
+            <button class="primary" id="start-round">СТАРТ РАУНДА</button>
+            <button class="secondary" id="reset-round">СБРОС / НОВЫЙ</button>
+          </div>
+        </section>
+
+        <section class="panel ranking-panel">
+          <div class="panel-head"><h2>Очередь нажатий</h2><span class="count" id="press-count">0 ответов</span></div>
+          <div class="ranking" id="ranking"><p class="empty">Здесь появится рейтинг текущего раунда.</p></div>
+          <div class="false-starts hidden" id="false-starts"></div>
+          <div class="judge-actions hidden" id="judge-actions">
+            <button class="judge correct" id="answer-correct">✓ ОТВЕТ ВЕРНЫЙ</button>
+            <button class="judge wrong" id="answer-wrong">✕ ОТВЕТ НЕВЕРНЫЙ</button>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="/host.js"></script>
+</body>
+</html>
